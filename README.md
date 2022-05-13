@@ -1,24 +1,39 @@
-# task34
+# 需求書
 
-## Project setup
-```
-npm install
-```
+## 使用資源
 
-### Compiles and hot-reloads for development
-```
-npm run serve
+```text
+https://www.taiwanstat.com/waters/latest
 ```
 
-### Compiles and minifies for production
-```
-npm run build
+---
+
+## 視覺
+
+```text
+請按完成圖排版。
 ```
 
-### Lints and fixes files
-```
-npm run lint
-```
+---
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+## 渲染
+
+### 情境色系
+
+- 藍色: 水量達 50% 以上。
+- 橙色: 水量達 30% ~ 49%。
+- 紅色: 水量達 29% 以下。
+
+### 昨日水量
+
+- 計算昨日水量狀況。
+- 套用情境色彩。
+
+---
+
+
+## 動畫
+
+```text
+波浪動畫
+```

@@ -1,18 +1,43 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <header class="hd">
+    <h1 class="hd__title">台灣水庫即時水情</h1>
+    </header>
+    <main>
+      <CardComponent :water-data='waterData[`${damName[0]}`]'></CardComponent>
+    </main>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import CardComponent from './components/CardComponent.vue';
 
 export default {
   name: 'App',
+  data() {
+    return {
+      waterData: [],
+      damName :[],
+    }
+  },
+  created() {
+    this.getData();
+  },
+  computed:{
+
+  },
+  methods:{
+    getData(){
+      const api = 'https://www.taiwanstat.com/waters/latest';
+      this.$http.get(api).then(res => {
+        this.waterData = res.data[0];
+        this.damName =  Object.keys(res.data[0]);
+    });
+    },
+  },
   components: {
-    HelloWorld
-  }
+    CardComponent,
+  },
 }
 </script>
 
