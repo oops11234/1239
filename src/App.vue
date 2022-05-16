@@ -1,10 +1,12 @@
 <template>
-  <div id="app">
+  <div class="container mx-auto" id="app">
     <header class="hd">
     <h1 class="hd__title">台灣水庫即時水情</h1>
     </header>
-    <main>
-      <CardComponent :water-data='waterData[`${damName[0]}`]'></CardComponent>
+    <main class="main">
+      <div class="component" v-for="(item, i) in damName" :key="i">
+      <CardComponent :water-data='waterData[`${damName[i]}`]'></CardComponent>
+      </div>
     </main>
   </div>
 </template>
@@ -49,5 +51,18 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+.container {
+  width: 1200px;
+}
+.mx-auto {
+  margin-right: auto;
+  margin-left: auto;
+}
+.main {
+  display: flex;
+  flex-wrap: wrap;
+
 }
 </style>
