@@ -11,17 +11,32 @@
           'card__content--danger': parentData.percentage < 30,
         },
       ]"
+      :style="
+        parentData.percentage >= 50
+          ? {
+              background: `linear-gradient(#fff ${
+                100 - parentData.percentage
+              }%, #0089c5 ${100 - parentData.percentage}%)`,
+            }
+          : parentData.percentage >= 30 && parentData.percentage < 50
+          ? {
+              background: `linear-gradient(#fff ${
+                100 - parentData.percentage
+              }%, #ffa077 ${100 - parentData.percentage}%)`,
+            }
+          : {
+              background: `linear-gradient(#fff ${
+                100 - parentData.percentage
+              }%, #ff4444 ${100 - parentData.percentage}%)`,
+            }
+      "
     >
-      <div class="card__num">
-        <div
-          class="card__bg"
-          :style="{ height: `${parentData.percentage}%` }"
-        ></div>
-        <p class="card__desc">{{ netPercentage }}%</p>
-      </div>
+      <p class="card__desc">{{ netPercentage }}%</p>
     </div>
     <div class="card__text">
-      <p class="card__amount">有效蓄水量 : {{ parentData.volumn }} 萬立方公尺</p>
+      <p class="card__amount">
+        有效蓄水量 : {{ parentData.volumn }} 萬立方公尺
+      </p>
       <p
         :class="[
           'card__netFlow',
@@ -32,7 +47,7 @@
         ]"
       >
         昨日水量{{ statusText() }}
-        {{ countNetFlow}}
+        {{ countNetFlow }}
       </p>
       <p class="card__updateAt">{{ parentData.updateAt }}</p>
     </div>
@@ -53,7 +68,12 @@ export default {
         return '待更新';
       } else {
         return (
-          ((Math.abs(this.parentData.daliyNetflow) / this.parentData.baseAvailable) * 100).toFixed(2) + '%');
+          (
+            (Math.abs(this.parentData.daliyNetflow) /
+              this.parentData.baseAvailable) *
+            100
+          ).toFixed(2) + '%'
+        );
       }
     },
 
@@ -66,8 +86,8 @@ export default {
       return this.parentData.daliyNetflow >= 0
         ? '下降'
         : this.parentData.daliyNetflow < 0
-          ? '上升'
-          : '狀態';
+        ? '上升'
+        : '狀態';
     },
   },
 };
@@ -85,48 +105,35 @@ export default {
 
 .card__content {
   position: relative;
-  height: 270px;
-  border-radius: 50%;
-  box-sizing: border-box;
-}
-
-.card__content--peace {
-  color: #0089c5;
-  border: 7px solid #0089c5;
-}
-
-.card__content--warning {
-  color: #ffa077;
-  border: 7px solid #ffa077;
-}
-
-.card__content--danger {
-  color: #ff4444;
-  border: 7px solid #ff4444;
-}
-
-.card__num {
-  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 100%;
-  font-size: 64px;
-  box-sizing: border-box;
-  border: 7px solid #fff;
+  height: 270px;
   border-radius: 50%;
+  box-sizing: border-box;
   overflow: hidden;
 }
 
-.card__desc {
-  mix-blend-mode: multiply;
+.card__content--peace {
+  color: #0089c5;
+  box-shadow: 0 0 0 7px #0089c5 inset, 0 0 0 14px #fff inset;
+  background: linear-gradient(180deg, #0089c5 30%, #fff 30%);
 }
 
-.card__bg {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
+.card__content--warning {
+  color: #ffa077;
+  box-shadow: 0 0 0 7px #ffa077 inset, 0 0 0 14px #fff inset;
+}
+
+.card__content--danger {
+  color: #ff4444;
+  box-shadow: 0 0 0 7px #ff4444 inset, 0 0 0 14px #fff inset;
+}
+
+.card__desc {
+  font-size: 64px;
+  mix-blend-mode: multiply;
 }
 
 .card__content--peace .card__bg {
