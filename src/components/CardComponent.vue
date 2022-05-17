@@ -1,44 +1,40 @@
 <template>
   <div class="card">
-    <div class="card__titleZone">
-      <h2 class="card__title">{{ waterData.name }}</h2>
-      <div 
-        v-if="waterData.percentage >= 50" 
-        class="card__content card__content--peace"
-        :style="{
-            background: `linear-gradient(#fff ${100 - waterData.percentage}%, #0089c5 ${100 - waterData.percentage}%)`,
-          }"
-        >
-        <p class="card__num">{{ netPercentage }} %</p>
+    <h2 class="card__title">{{ parentData.name }}</h2>
+    <div
+      :class="[
+        'card__content',
+        {
+          'card__content--peace': parentData.percentage >= 50,
+          'card__content--warning':
+            parentData.percentage >= 30 && parentData.percentage < 50,
+          'card__content--danger': parentData.percentage < 30,
+        },
+      ]"
+    >
+      <div class="card__num">
+        <div
+          class="card__bg"
+          :style="{ height: `${parentData.percentage}%` }"
+        ></div>
+        <p class="card__desc">{{ netPercentage }}%</p>
       </div>
-      <div 
-        v-else-if="waterData.percentage >= 30 && waterData.percentage < 50" 
-        class="card__content card__content--warning"
-        :style="{
-            background: `linear-gradient(#fff ${100 - waterData.percentage}%, #ffa077 ${100 - waterData.percentage}%)`,
-          }"
-        >
-        <p class="card__num">{{ netPercentage }} %</p>
-      </div>
-      <div 
-        v-else 
-        class="card__content card__content--danger"
-        :style="{
-            background: `linear-gradient(#fff ${100 - waterData.percentage}%, #ff4444 ${100 - waterData.percentage}%)`,
-          }"
-        >
-        <p class="card__num">{{ netPercentage }} %</p>
-      </div>
-      <div class="card__text">
-        <p class="card__amount">有效蓄水量 : {{ waterData.baseAvailable }} 萬立方公尺</p>
-        <p 
-          :class="{
-            card__netFlow:true,
-            'card__netFlow--rise': this.waterData.daliyNetflow > 0,
-            'card__netFlow--drop': this.waterData.daliyNetflow < 0,
-            }">昨日水量{{ this.waterData.daliyNetflow > 0 ? '上升' : '下降' }} {{ netFlow }}%</p>
-        <p class="card__updateAt"> {{ waterData.updateAt }} </p>
-      </div>
+    </div>
+    <div class="card__text">
+      <p class="card__amount">有效蓄水量 : {{ parentData.volumn }} 萬立方公尺</p>
+      <p
+        :class="[
+          'card__netFlow',
+          {
+            'card__netFlow--rise': this.parentData.daliyNetflow <= 0,
+            'card__netFlow--drop': this.parentData.daliyNetflow > 0,
+          },
+        ]"
+      >
+        昨日水量{{ statusText() }}
+        {{ countNetFlow}}
+      </p>
+      <p class="card__updateAt">{{ parentData.updateAt }}</p>
     </div>
   </div>
 </template>
@@ -47,31 +43,39 @@
 export default {
   name: 'CardComponent',
   props: {
-    waterData: [],
+    parentData: {
+      type: Object,
+    },
   },
-  computed:{
-     netFlow() {
-       if (isNaN(this.waterData.daliyNetflow)){
-         return 0;
-         }else{
-           return Math.abs(+(Math.round(this.waterData.daliyNetflow  + "e+2") + "e-2"));
-         }
+  computed: {
+    countNetFlow() {
+      if (isNaN(this.parentData.daliyNetflow)) {
+        return '待更新';
+      } else {
+        return (
+          ((Math.abs(this.parentData.daliyNetflow) / this.parentData.baseAvailable) * 100).toFixed(2) + '%');
+      }
     },
 
     netPercentage() {
-      return +(Math.round(this.waterData.percentage  + "e+1") + "e-1");
+      return this.parentData.percentage.toFixed(1);
     },
   },
-
-}
+  methods: {
+    statusText() {
+      return this.parentData.daliyNetflow >= 0
+        ? '下降'
+        : this.parentData.daliyNetflow < 0
+          ? '上升'
+          : '狀態';
+    },
+  },
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .card {
-  padding-right: 20px;
-  padding-left: 20px;
-  width: 300px;
   box-sizing: border-box;
 }
 
@@ -79,34 +83,62 @@ export default {
   margin-bottom: 40px;
 }
 
-.card__content{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 260px;
-  border: 7px solid #fff;
+.card__content {
+  position: relative;
+  height: 270px;
   border-radius: 50%;
+  box-sizing: border-box;
 }
 
 .card__content--peace {
-  color: #0276a8f5;
-  outline: 7px solid #0089c5;
-}
-
-.card__content--danger {
-  color: #c23737b0;
-  outline: 7px solid #ff4444;
-  background-image: linear-gradient(#fff 30%, #ff4444 30%) 
+  color: #0089c5;
+  border: 7px solid #0089c5;
 }
 
 .card__content--warning {
-  color: #d38665b9;
-  outline: 7px solid #ffa077;
+  color: #ffa077;
+  border: 7px solid #ffa077;
+}
+
+.card__content--danger {
+  color: #ff4444;
+  border: 7px solid #ff4444;
 }
 
 .card__num {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
   font-size: 64px;
+  box-sizing: border-box;
+  border: 7px solid #fff;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.card__desc {
+  mix-blend-mode: multiply;
+}
+
+.card__bg {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
+
+.card__content--peace .card__bg {
+  background-color: #0089c5;
+}
+
+.card__content--warning .card__bg {
+  background-color: #ffa077;
+}
+
+.card__content--danger .card__bg {
+  background-color: #ff4444;
 }
 
 .card__text {
@@ -129,13 +161,12 @@ export default {
 }
 
 .card__netFlow--drop {
-color: #ff4444;
+  color: #ff4444;
 }
 
 .card__updateAt {
-  color: #a8a7a7;
   margin-top: 10px;
+  color: #a8a7a7;
   text-align: left;
 }
-
 </style>
