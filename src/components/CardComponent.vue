@@ -11,26 +11,11 @@
           'card__content--danger': parentData.percentage < 30,
         },
       ]"
-      :style="
-        parentData.percentage >= 50
-          ? {
-              background: `linear-gradient(#fff ${
-                100 - parentData.percentage
-              }%, #0089c5 ${100 - parentData.percentage}%)`,
-            }
-          : parentData.percentage >= 30 && parentData.percentage < 50
-          ? {
-              background: `linear-gradient(#fff ${
-                100 - parentData.percentage
-              }%, #ffa077 ${100 - parentData.percentage}%)`,
-            }
-          : {
-              background: `linear-gradient(#fff ${
-                100 - parentData.percentage
-              }%, #ff4444 ${100 - parentData.percentage}%)`,
-            }
-      "
     >
+      <div
+        class="card__bg"
+        :style="{ height: `${parentData.percentage}%` }"
+      ></div>
       <p class="card__desc">{{ netPercentage }}%</p>
     </div>
     <div class="card__text">
@@ -108,7 +93,6 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
   height: 270px;
   border-radius: 50%;
   box-sizing: border-box;
@@ -118,7 +102,6 @@ export default {
 .card__content--peace {
   color: #0089c5;
   box-shadow: 0 0 0 7px #0089c5 inset, 0 0 0 14px #fff inset;
-  background: linear-gradient(180deg, #0089c5 30%, #fff 30%);
 }
 
 .card__content--warning {
@@ -134,6 +117,14 @@ export default {
 .card__desc {
   font-size: 64px;
   mix-blend-mode: multiply;
+}
+
+.card__bg {
+  position: absolute;
+  width: 100%;
+  bottom: 14px;
+  z-index: -1;
+  box-sizing: border-box;
 }
 
 .card__content--peace .card__bg {
