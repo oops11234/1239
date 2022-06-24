@@ -91,8 +91,11 @@ export default {
 .card__content {
   position: relative;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
+  padding-top: 14px;
+  padding-bottom: 14px;
   height: 270px;
   border-radius: 50%;
   box-sizing: border-box;
@@ -115,14 +118,14 @@ export default {
 }
 
 .card__desc {
+  position: absolute;
+  top: 15%;
   font-size: 64px;
   mix-blend-mode: multiply;
 }
 
 .card__bg {
-  position: absolute;
   width: 100%;
-  bottom: 14px;
   z-index: -1;
   box-sizing: border-box;
 }
