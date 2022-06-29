@@ -1,6 +1,6 @@
 const { defineConfig } = require('@vue/cli-service');
 
 module.exports = defineConfig({
-  publicPath: '/vue-API-CSS-practice/',
+  publicPath: '/Vue-API-CSS-practice/',
   transpileDependencies: true,
 });
