@@ -7,7 +7,7 @@
 https://www.taiwanstat.com/waters/latest
 ```
 
-## [DEMO](https://oops11234.github.io/vue-API-CSS-practice/)
+## [DEMO](https://oops11234.github.io/Vue-API-CSS-practice/)
 ### technical point
 ```
 * Fetch API from Open Source(government).
